@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اكتشفي قيمك | تحديات عَين</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3D6E9A;--deep:#2c5578;--yel:#FFEBB1;--yel2:#ffdf8a;--ink:#23384a;--soft:#6c8398;--line:#d8e3ee}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Tajawal',sans-serif;background:var(--blue);color:var(--ink);display:flex;justify-content:center}
+.app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--blue)}
+.blob{position:absolute;border-radius:50%;background:var(--yel);opacity:.1}
+.b1{width:320px;height:320px;top:-130px;left:-120px}.b2{width:260px;height:260px;bottom:-100px;right:-100px}
+header{position:relative;z-index:1;padding:20px 22px 6px;text-align:center;color:#fff}
+.brand{font-weight:800;font-size:19px;color:var(--yel)}
+.barw{position:relative;margin-top:14px;height:10px;background:rgba(255,255,255,.22);border-radius:10px}
+.bar{position:absolute;right:0;top:0;height:100%;width:0;background:var(--yel);border-radius:10px}
+.bar b{position:absolute;left:-12px;top:-9px;color:var(--yel);font-size:24px;background:var(--blue);border-radius:50%;line-height:26px;width:26px;height:26px;text-align:center;font-weight:400}
+.tag{margin-top:10px;font-size:14px;color:#dbe8f3;min-height:20px}
+main{position:relative;z-index:1;flex:1;padding:12px 20px 6px;display:flex;flex-direction:column;justify-content:center}
+.card{min-width:0;background:#fff;border-radius:28px;padding:24px 20px;box-shadow:0 14px 34px rgba(0,0,0,.2)}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+h1{font-size:34px;font-weight:800;color:var(--blue);line-height:1.4;text-align:center}
+h2{font-size:20px;line-height:1.8;font-weight:800;color:var(--blue)}
+.pre{font-size:16px;line-height:1.95;color:var(--ink);margin-bottom:8px}
+.hint{font-size:15px;color:var(--soft);margin-top:8px;line-height:1.8}
+.star{color:#e6b93c;display:block;text-align:center;font-size:26px;margin:6px 0}
+p.lead{font-size:18px;line-height:1.9;text-align:center;margin-top:8px}
+.eg{background:var(--yel);border-radius:14px;padding:10px 14px;font-size:14px;color:#6a5313;margin-top:12px;line-height:1.8}
+input[type=text],textarea{width:100%;font-family:inherit;font-size:18px;color:var(--ink);background:#f5f9fc;border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:12px;outline:none;}
+textarea{min-height:110px;resize:none;line-height:1.7}
+input:focus,textarea:focus{border-color:var(--blue);background:#fff}
+label.l{display:block;margin-top:16px;font-weight:700;font-size:16px;color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{border:2px solid var(--line);background:#f5f9fc;border-radius:16px;padding:9px 13px;font-family:inherit;font-size:15px;color:var(--ink);cursor:pointer;}
+.chip.on{background:var(--yel);border-color:var(--blue);font-weight:700}
+.chip.add{background:#fff;border-style:dashed;color:var(--blue);font-size:13px;padding:7px 11px}
+.chip.off{opacity:.55}
+footer{position:relative;z-index:1;padding:10px 20px 26px;display:flex;gap:10px;align-items:center}
+.btn{font-family:inherit;font-weight:800;font-size:19px;border:none;border-radius:20px;padding:16px;cursor:pointer;}
+.next{flex:1;background:var(--yel);color:var(--blue);box-shadow:0 8px 18px rgba(0,0,0,.2)}
+.next:active{opacity:.85}
+.next:disabled{opacity:.45;box-shadow:none}
+.ghost{flex:1;background:rgba(255,255,255,.16);color:#fff;box-shadow:none}
+.back{background:rgba(255,255,255,.16);color:#fff;font-size:16px;padding:14px 16px;font-weight:700;border-radius:18px;flex:none;white-space:nowrap}
+.note{text-align:center;font-size:13px;color:#dbe8f3;padding:0 22px 6px;position:relative;z-index:1;min-height:20px}
+.priv{background:var(--yel);border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.8;margin-top:14px;color:#2c5578}
+.meta{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--soft)}
+.big-def{font-size:20px;line-height:2;text-align:center;color:var(--blue);font-weight:500;margin-top:10px}
+.quote{background:var(--yel);border-radius:18px;padding:14px 16px;margin-top:16px;line-height:1.9;font-size:16px;color:#2c5578;text-align:center}
+.diff{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:14px}
+.diff div{border:2px solid var(--line);border-radius:16px;padding:10px 12px;font-size:14px;line-height:1.7;color:var(--ink)}
+.diff b{display:block;color:var(--blue);font-size:16px}
+.diff .me{background:var(--yel);border-color:var(--blue)}
+.vcard{margin:14px 0 4px;border-radius:24px;border:3px solid var(--line);background:#f5f9fc;padding:44px 12px;text-align:center;}
+.card.noanim{animation:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.vcard.hit{background:var(--yel);border-color:var(--blue)}
+.vcard .vn{font-size:38px;font-weight:800;color:var(--blue);line-height:1.4}
+.vcard .vh{margin-top:10px;font-size:14px;color:#2c5578;font-weight:700}
+.cnt{text-align:center;color:var(--soft);font-size:14px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;flex:1}
+.cmp{display:block;width:100%;margin-top:12px;font-family:inherit;font-size:20px;line-height:1.7;border:3px solid var(--line);background:#f5f9fc;border-radius:22px;padding:20px 14px;color:var(--ink);cursor:pointer;text-align:center}
+.cmp b{color:var(--blue);font-size:24px}
+.cmp:active,.cmp.on{background:var(--yel);border-color:var(--blue)}
+.or{text-align:center;color:var(--soft);margin-top:8px;font-size:14px}
+.cr{font-size:12px;color:var(--soft);text-align:center;margin-top:16px;line-height:1.8}
+.cr a{color:var(--blue)}
+.sc{margin-top:14px;border-radius:24px;border:3px solid var(--line);background:#f5f9fc;padding:20px 12px 14px;text-align:center}
+.sc.yes{background:var(--yel);border-color:var(--blue)}
+.sc.no{opacity:.6}
+.sc .sn{font-size:30px;font-weight:800;color:var(--blue);line-height:1.4}
+.sc .sn span{display:inline-block;width:26px;height:26px;line-height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:14px;margin-left:10px;vertical-align:middle}
+.so{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:14px}
+.so button{font-family:inherit;font-size:13px;padding:10px 2px;border:2px solid var(--line);background:#fff;border-radius:14px;color:var(--ink);cursor:pointer;white-space:nowrap}
+.so button.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:800}
+.rc{border:3px solid var(--line);border-radius:20px;padding:12px 14px;margin-top:12px}
+.rc.t1{border-color:var(--blue);background:#fbfdff}
+.rc .rn{font-weight:800;font-size:24px;color:var(--blue)}
+.rc .rs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.vt{text-align:center;font-size:36px;font-weight:800;color:var(--blue);margin-bottom:14px;margin-top:6px}
+.reqt{font-size:13px;color:var(--soft);text-align:center;margin-top:2px}
+.exr{border:2px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:10px}
+.exr p{font-size:16px;line-height:1.8}
+.exr .rs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.ring{position:relative;display:inline-block;padding:0 20px}
+.ring svg{position:absolute;left:-4px;top:-8px;width:calc(100% + 8px);height:calc(100% + 16px);overflow:visible;pointer-events:none}
+.ring{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ring path{fill:none;stroke:#e6b93c;stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:rdraw 1.3s .35s ease-out forwards}
+.ring.re path{animation:none}
+@keyframes rdraw{to{stroke-dashoffset:0}}
+.exh{font-weight:800;color:var(--blue);font-size:17px;margin-top:18px}
+.exb{border:none;border-right:4px solid var(--yel);padding:2px 12px 2px 0;margin-top:20px}
+.exb p{font-size:17px;line-height:1.9;color:var(--ink)}
+.exchips{display:flex;gap:5px;margin-top:8px;flex-wrap:nowrap}
+.exchips .chip{font-size:12px;padding:6px 9px;white-space:nowrap;background:#fff;border-width:1.5px;border-radius:20px;color:var(--soft)}
+.exchips .chip.on{background:var(--yel);color:var(--ink)}
+.sep{height:2px;background:var(--line);border-radius:2px;margin:20px 0 4px}
+.acc{margin-top:14px;text-align:center;font-size:13px;line-height:2;color:var(--soft)}
+.acc .row{display:flex;justify-content:center;gap:20px;margin-top:8px}
+.acc a{display:flex;align-items:center;gap:8px;color:var(--deep);font-weight:700;font-size:13px;text-decoration:none;direction:ltr;white-space:nowrap}
+.acc .ic{display:flex}
+.acc .ic svg{width:18px;height:18px;fill:#E6B93C}
+.qt{font-size:14px;line-height:2.1;color:#2c5578;background:var(--yel);border-radius:14px;padding:12px 12px;margin-top:12px;text-align:center}
+.qt b{display:block;font-weight:800;color:#1f4467}
+.out{background:#f5f9fc;border:2px dashed #a9bfd3;border-radius:16px;padding:14px;margin-top:10px;font-size:15px;line-height:1.9;white-space:pre-wrap;max-height:220px;overflow:auto}
+.act{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:10px}
+.act a,.act button{font-family:inherit;font-weight:800;font-size:14px;border:none;border-radius:14px;padding:11px 8px;text-align:center;text-decoration:none;color:#fff;background:var(--blue);cursor:pointer;display:block}
+.act .full{grid-column:1/3}
+.act .tg{background:#2a8fc9}.act .gr{background:var(--deep)}.act .yl{background:var(--yel);color:var(--blue)}
+.act .ok{background:#2e9e5b!important}
+.act .lt{background:transparent;color:var(--soft);font-weight:500;font-size:14px}
+.cardimg{display:block;width:100%;border-radius:18px;margin-top:14px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.fl{position:fixed;pointer-events:none;color:var(--yel);animation:up 2.8s ease-out forwards;z-index:5}
+@keyframes up{from{opacity:1;transform:translateY(0) rotate(0)}to{opacity:0;transform:translateY(-110vh) rotate(160deg)}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="blob b1"></div><div class="blob b2"></div>
+
+<header>
+<div class="brand">تحديات عَين</div>
+<div class="barw"><div class="bar" id="bar"><b>✦</b></div></div>
+<div class="tag" id="tag"></div>
+</header>
+<main id="main"></main>
+<div class="note" id="note"></div>
+<footer id="foot"></footer>
+</div>
+
+<script>
+/* البريد الذي يظهر في زر "إرسال بالإيميل" */
+const EMAIL = "challenges.829@gmail.com";
+const VIDEO = "https://youtu.be/4Zh6PGOimEU";
+const KEY = "values_tool_v1";
+const MAXSEL = 12, MINSEL = 8, TOP = 5;
+
+/* القيم: العائلة | الاسم | كلمات تدل عليها (لاقتراح القيم من كلماتها) */
+const RAW = `
+rel|الحب|حب,احب,يحب,تحب,حبي,حبيب,محبة,عشق
+rel|العائلة|عائل,اسرة,اهل,اهلي,اطفال,ابناء,اولاد,والد
+rel|الصداقة|صداق,صديق,صاحب,اصحاب,رفيق,رفقة
+rel|الانتماء|انتماء,انتمي,ينتمي,جماعة,مجتمع
+rel|الوفاء|وفاء,اوفي,وفي,اخلاص,الجميل
+rel|التواصل|تواصل,حوار,تفاهم,استماع
+grow|النمو|نمو,تطور,تطوير,نضج,تحسن
+grow|التعلّم|تعلم,علم,قراءة,اقرا,دراس,معرفة,ثقافة
+grow|الإنجاز|انجاز,انجز,نجاح,اكمال,اتمام,تحقيق,اتحقق
+grow|التميّز|تميز,اتقان,احتراف,جودة,افضل,ممتاز
+grow|الطموح|طموح,طمح,اهداف,هدف,احلام,حلم,اسعي
+grow|الفضول|فضول,تساءل,تسائل,اسئلة
+grow|الانضباط|انضباط,التزام,نظام,روتين,جدول,ترتيب,عادة,عادات
+grow|الاستكشاف|استكشاف,اكتشف,اكتشاف,تجريب,اجرب,تجربة,جديد
+free|الحرية|حرية,حرا,حر,تحرر,انطلاق,انطلق
+free|الاستقلال|استقلال,مستقل,بنفسي,ذاتي,اعتماد,اعتمد
+free|المرونة|مرونة,مرن,تكيف,تاقلم,تغيير
+free|الاختيار|اختيار,اختار,خيار,قرار,اقرر,حقي
+free|المغامرة|مغامر,مخاطر,جراة,شجاع,اجازف,تحدي
+free|التمكين|تمكين,تمكن,قوة,قدرة,قدرتي,قوي,اقدر,استطيع,ثقة,ثقتي
+safe|الأمان|امان,امن,حماية,محمي,سلامة,طمان,اطمان,اطمين,راحة بال
+safe|الاستقرار|استقرار,مستقر,ثبات,ثابت,استمرار,دوام
+safe|المال|مال,مالي,فلوس,دخل,رزق,ثروة,ربح,راتب
+meaning|الأثر|اثر,تاثير,بصمة,ابصم
+meaning|العطاء|عطاء,اعطي,عطا,كرم,بذل,مساعد,ساعد
+meaning|المساهمة|مساهم,ساهم,مشارك,تطوع
+meaning|الرسالة|رسالة,رسالتي,غاية,مهمتي,دوري
+meaning|العدل|عدل,عادل,انصاف,حقوق,ظلم,مساواة
+meaning|المعنى|معني,جدوي,يستاهل,معنا,هدف
+body|الصحة|صحة,صحي,صحتي,جسم,جسد,رياضة,نادي,غذاء,نوم,مشي,عافية
+body|الراحة|راحة,ارتاح,استراح,استرخاء,اجازة,ريح
+body|الحيوية|حيوية,نشاط,طاقة,طاقتي,نشيط
+body|العناية بالنفس|عناية,اعتني,تدليل,دلع,اهتم بنفسي
+body|التوازن|توازن,اتزان,متوازن,موازنة,تنظيم وقت
+body|الحضور|حضور,حاضر,لحظة,انتباه,وعي,تركيز
+art|الإبداع|ابداع,ابدع,مبدع,ابتكار,ابتكر,تصميم,فني,فن
+art|الجمال|جمال,جميل,زينة,ذوق,احسان
+art|التعبير|تعبير,اعبر,كتابة,اكتب,ابوح,بوح,صوتي,رايي
+art|الأناقة|اناق,انيق,موضة,ستايل,لبس,ملابس,قطعة,تنسيق
+art|البساطة|بساطة,بسيط,ابسط,تبسيط,سهولة,سهل
+soul|الصدق|صدق,صادق,صراحة,صريح,حقيقي,حقيقة,شفاف,وضوح
+soul|الأصالة|اصالة,اصيل,اكون نفسي,هويتي,هوية,نفسي الحقيقية,بصمتي
+soul|الاتساق|اتساق,تطابق,توافق,وعد,كلمتي,تناسق,متسق
+soul|الإيمان|ايمان,الله,دعاء,صلاة,توكل,ربنا,ربي,قران,يقين,دين,عبادة,استغفار
+soul|السلام الداخلي|سلام,هدوء,سكينة,سكون,صفاء,تامل,هادي,اهدا
+soul|الرحمة|رحمة,رحيم,حنان,حنو,لين,لطف,تعاطف,ارحم,رفق,عطف,رحمة بنفسي,ارحم نفسي,اسامح نفسي,اتقبل نفسي,تقبل
+soul|الامتنان|امتنان,شكر,ممتن,نعمة,تقدير,حمد
+joy|البهجة|بهجة,فرح,سعاد,سعيد,سرور,مبسوط,ابتسام
+joy|المرح|مرح,ضحك,اضحك,مزاح,دعابة,لعب,ممتع
+joy|العفوية|عفوية,عفوي,تلقاي,طبيعتي,بدون تخطيط
+joy|الشغف|شغف,متحمس,حماس,اعشق,ولع,لهفة
+`.trim().split('\n').map(l=>{const [f,n,k]=l.split('|');return {f,n,k:k.split(',')}});
+const NAMES = RAW.map(v=>v.n);
+const FAM = n=>{const r=RAW.find(v=>v.n===n);return r?r.f:'c_'+n};
+
+/* أمثلة جاهزة تظهر مع القيمة (أضيفي أمثلة لقيم أخرى هنا متى أردتِ) */
+const EXAMPLES = {
+ 'التمكين':['أستطيع أن أتحرك بخطوة في عملي من اختياري بدل انتظار أحد','حوّلت الفكرة العامة لمشروع مجسّد على أرض الواقع وخطة مرتبة'],
+ 'الجمال':['عبّرت عن الجمال في مساحتي الشخصية','قدّمت عملي بطريقة فيها جمال وإحسان يشبهني']
+};
+const EXOPT = ['حصل معي','يشبهني','لم أفكر فيها من قبل'];
+const STARTERS = ['تعني لي…','حين أعيشها فعلًا أحس…','وحين أبتعد عنها أشعر…'];
+
+const RINGP='M18 42 C 10 14 80 4 130 8 C 185 12 198 40 170 62 C 140 80 50 76 20 52 C 12 46 14 36 30 28';
+const RING = t=>`<span class="ring">${t}<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="${RINGP}"/></svg></span>`;
+const $ = id=>document.getElementById(id);
+const esc = s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ---------- تطبيع النص العربي واقتراح القيم من الكلمات ---------- */
+const norm = s=>String(s||'').replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ئ/g,'ي').replace(/ؤ/g,'و');
+function hitsFor(text){
+ const t=norm(text);
+ const toks=t.split(/[^ء-ي]+/).filter(Boolean);
+ const vars=new Set();
+ toks.forEach(tk=>{vars.add(tk);['وال','بال','لل','ال','و','ب','ل','ف','ك'].forEach(p=>{if(tk.startsWith(p)&&tk.length>p.length+1)vars.add(tk.slice(p.length))})});
+ return RAW.filter(v=>v.k.some(s=>{
+  const ns=norm(s);
+  if(ns.includes(' '))return t.includes(ns);
+  if(ns.length>=4)return toks.some(tk=>tk.includes(ns));
+  return vars.has(ns);
+ })).map(v=>v.n);
+}
+
+/* ---------- الحالة ---------- */
+const fresh = ()=>({name:'',imp1:'',imp2:'',ver:'',hits:null,order:null,dec:[],sel:null,viaTrim:false,pk:'',pairs:null,ans:[],rank:null,finals:[],pool:[],verd:{},mean:{},exc:{},mine:{},step:'',custom:[]});
+let A = fresh(), scr='welcome', sub=0;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({A,scr,sub}))}catch(e){}};
+const loadSaved=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.scr==='imp2')s.scr='imp1';return s&&s.A&&s.scr&&s.scr!=='welcome'&&s.A.name?s:null}catch(e){return null}};
+const clearSaved=()=>{try{localStorage.removeItem(KEY)}catch(e){}};
+function go(s,n){scr=s;sub=n||0;save();render();window.scrollTo(0,0)}
+
+const M=()=>$('main'), F=()=>$('foot');
+function prog(p,tag,note){$('bar').style.width=p+'%';$('tag').textContent=tag||'';$('note').textContent=note||''}
+const backBtn=`<button class="btn back" id="bk">→ رجوع</button>`;
+const bind=(id,fn)=>{const e=$(id);if(e)e.onclick=fn};
+
+/* ---------- الرجوع ---------- */
+function back(){
+ if(scr==='intro')return sub>0?go('intro',sub-1):go('welcome');
+ if(scr==='imp1')return go('intro',1);
+ if(scr==='ver')return go('imp1');
+ if(scr==='ext')return go('ver');
+ if(scr==='cards'){ if(A.dec.length){A.dec.pop();return go('cards')} return go('ext') }
+ if(scr==='trim'){ A.dec.pop(); return go('cards') }
+ if(scr==='cmp'){
+  if(A.ans.length){A.ans.pop();return go('cmp')}
+  return go('cmpintro');
+ }
+ if(scr==='cmpintro'){ if(A.viaTrim)return go('trim'); A.dec.pop();return go('cards') }
+ if(scr==='sum'){A.ans.pop();return go('cmp')}
+ if(scr==='val')return sub>0?go('val',sub-1):go('sum');
+ if(scr==='ex')return go('val',A.finals.length-1);
+ if(scr==='step')return go('ex');
+ if(scr==='card')return go('step');
+}
+
+/* ---------- الشاشات ---------- */
+const R={};
+
+R.welcome=()=>{
+ prog(0,'');
+ const sv=loadSaved();
+ M().innerHTML=`<div class="card"><h1>اكتشفي ${RING('قيمك')}</h1><span class="star">✦</span>
+ <p class="lead">رحلة قصيرة تعرفين فيها ما يهمك فعلًا،<br>وتخرجين ببطاقة بقيمك العليا</p>
+ <div class="meta"><span>⏱ ١٠–١٥ دقيقة</span><span>🔒 إجاباتك في جوالك فقط</span></div>
+ ${sv?`<div class="quote">عندك رحلة لم تكتمل يا ${esc(sv.A.name)}<div class="act"><button class="gr" id="resume">كملي من حيث وقفتِ</button><button class="yl" id="fresh">ابدئي من جديد</button></div></div>`:''}
+ <label class="l">اسمي:</label>
+ <input type="text" id="nm" placeholder="اكتبي اسمك" value="${esc(A.name)}">
+ <div class="priv"><b>خصوصيتك:</b> إجاباتك تبقى على جوالك ولا تُرسل لأي جهة. لا يصلني شيء إلا إذا اخترتِ أنتِ مشاركته.<br>هذا تمرين تأمل مستوحى من تمارين توضيح القيم، وليس اختبارًا نفسيًا.</div></div>`;
+ F().innerHTML=`<button class="btn next" id="go" disabled>يلا نبدأ ✦</button>`;
+ const chk=()=>{$('go').disabled=!$('nm').value.trim()};
+ $('nm').oninput=chk;chk();
+ $('go').onclick=()=>{const n=$('nm').value.trim();clearSaved();A=fresh();A.name=n;go('intro',0)};
+ bind('resume',()=>{A=sv.A;go(sv.scr,sv.sub)});
+ bind('fresh',()=>{clearSaved();A=fresh();render()});
+};
+
+R.intro=()=>{
+ prog(3+sub*3,'قبل البداية');
+ if(sub===0){
+  M().innerHTML=`<div class="card"><h1>${RING('القيم')}</h1><span class="star">✦</span>
+  <div class="big-def">هو كل ما هو قيّم لديك،<br>وتتخذين من خلاله قراراتك، وسلوكياتك، وأهدافك، وعلاقاتك، وكل جوانب حياتك.</div>
+  <div class="quote">القيم ليست ثابتة، تتغير مع نموك وتجارب حياتك.<br>لكن القيم العليا الأساسية تميل للثبات.</div></div>`;
+ }else{
+  M().innerHTML=`<div class="card"><h2>قبل البداية ✦</h2>
+  <div class="quote" style="text-align:right">اتبعي حدسك، واعتبريها لعبة ممتعة.<br>وإن شعرتِ بارتباك أو صعوبة، خذي نفسًا وذكّري نفسك:<br><b>أنا هنا لأستمتع وأكتشف.</b></div>
+  <div class="hint" style="margin-top:16px;font-weight:700;color:var(--blue)">الفرق بين:</div>
+  <div class="diff">
+   <div><b>الاهتمامات</b>ما يجذب اهتمامك وفضولك</div>
+   <div><b>المهارات</b>قدراتك وما تجيدينه بشكل فطري أو دربتِ نفسك عليه</div>
+   <div><b>الشخصية</b>أسلوبك وطريقتك</div>
+   <div class="me"><b>القيم</b>ما هو أولويتك والمعنى الخاص بك</div>
+  </div></div>`;
+ }
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">${sub===0?'التالي':'نبدأ ✦'}</button>`;
+ bind('bk',back);
+ $('nx').onclick=()=>sub===0?go('intro',1):go('imp1');
+};
+
+function textScreen(key,pct,tag,q,h,ph,pre){
+ prog(pct,tag,'أول ما يجي ببالك يكفي ✦');
+ M().innerHTML=`<div class="card">${pre?`<div class="pre">${pre}</div>`:''}<h2>${q}</h2>${h?`<div class="hint">${h}</div>`:''}<textarea id="tx" placeholder="${ph||'اكتبي هنا…'}">${esc(A[key])}</textarea></div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx" disabled>التالي</button>`;
+ const upd=()=>{$('nx').disabled=!$('tx').value.trim()};
+ $('tx').oninput=()=>{A[key]=$('tx').value;save();upd()};upd();
+ bind('bk',back);
+ return $('nx');
+}
+R.imp1=()=>{
+ textScreen('imp2',14,'الأثر','ما الكلمات التي سمعتِها تُردَّد؟','اكتبي كلمات، وليس جملًا.','مثال: كلمة، كلمة، كلمة','تخيلي أنك في محفل تكريم لأثرٍ قدّمتِه طوال ٨٠ عامًا من حياتك وأنتِ جالسة في الزاوية البعيدة، هادئة ومستقرة، وجئتِ لتشهدي فقط.').onclick=()=>go('ver');
+};
+R.imp2=()=>go('imp1');
+R.ver=()=>{
+ textScreen('ver',22,'نسختك','تخيلي النسخة التي تحبينها منك، بصفاتها وأسلوب حياتها ومشاعرها.<br>ما الذي يهمها؟ وما أولوياتها؟','اكتبي مجموعة كلمات.','اكتبي الكلمات…').onclick=()=>{
+  A.hits=hitsFor([A.imp1,A.imp2,A.ver].join(' '));
+  A.order=null;A.dec=[];A.pairs=null;A.sel=null;
+  go('ext');
+ };
+};
+
+
+/* ---------- كلماتك → قيم ---------- */
+const STOP=new Set(`في من على الى الي عن مع هذا هذه ذلك تلك التي الذي الذين ان انا انت انتي نحن هو هي هم كان كانت يكون تكون اكون لا ما لم لن لا كل بعض ثم او بل قد لكن حتي عند عندما اذا لو كي اي كيف لماذا ماذا هل جدا ايضا فقط دون بدون ضمن خلال بين مثل مما عليها عليه فيها فيه منها منه بها به لها له لي لك لنا الا انه انها كما حيث حين حينما بعد قبل كلما اكثر اقل دائما احيانا شيء شي اشياء وقت اريد اريدها اريده احب اكون يكونوا تكونين يجب لازم ممكن بس يعني يعني مو ليس ليست كثير كثيرا واحد واحدة هناك هنا اللي ذا ده وانا ولكن وهي وهو وكل وفي ومن ومع لانه لانها لان عشان علشان ايش وش ليش متي اين فمن فما فهي فهو`.split(/\s+/).map(norm));
+function wordsFrom(text){
+ const toks=String(text||'').replace(/[ً-ٰٟـ]/g,'').split(/[^ء-ي]+/).filter(Boolean);
+ const seen=new Set(),out=[];
+ toks.forEach(w=>{
+  const n=norm(w),core=n.replace(/^(وال|بال|لل|ال|و)/,'');
+  if(core.length<3||STOP.has(n)||STOP.has(core)||seen.has(core)||/(ها|هم|هن)$/.test(n))return;
+  if(NAMES.some(v=>norm(v)===n||norm(v)===norm('ال'+core)))return;
+  seen.add(core);out.push(w.replace(/^(وال|بال|لل)/,m=>m==='وال'?'ال':m==='بال'?'ال':'ال'));
+ });
+ return out.slice(0,28);
+}
+R.ext=()=>{
+ prog(24,'كلماتك');
+ const txt=[A.imp1,A.imp2,A.ver].join(' ');
+ const hits=A.hits=hitsFor(txt);A.custom=A.custom||[];
+
+ const cu=A.custom;
+ const extra=cu.map(w=>`<button class="chip on" data-w="${esc(w)}">${esc(w)} ✕</button>`).join('');
+ M().innerHTML=`<div class="card"><h2>كلماتك تحمل قيمًا ✦</h2>
+  <div class="hint">الكلمات التي كتبتِها قد تدل على قيم تهمك.${hits.length?'':' لم نجد تطابقًا مع قائمتنا، وتقدرين تكتبين قيمك بكلماتك أدناه.'}</div>
+  ${hits.length?`<div class="exh" style="margin-top:12px">قيم من قائمتنا ظهرت فيها</div><div class="chips">${hits.map(h=>`<span class="chip on" style="cursor:default">${h}</span>`).join('')}</div><div class="hint" style="font-size:13px">ستظهر لك هذه في أول البطاقات.</div>`:''}
+  <div class="exh" style="margin-top:16px">أو اكتبي قيمة بكلمتك</div>
+  <div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="cw" placeholder="مثال: الأناقة، الصبر…" style="margin-top:0;font-size:16px;padding:10px 14px"><button class="btn next" id="ad" style="flex:none;font-size:15px;padding:10px 16px;background:var(--blue);color:#fff;box-shadow:none">إضافة</button></div>
+  ${extra?`<div class="chips">${extra}</div>`:''}
+  <div class="hint" style="font-size:13px;margin-top:12px">ما تضيفينه يدخل مع بقية القيم في البطاقات التالية. وإن لم تريدي إضافة شيء اضغطي «التالي».</div></div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">التالي</button>`;
+ const redraw=()=>{const sy=window.scrollY,tv=$('cw').value;save();R.ext();$('cw').value=tv;window.scrollTo(0,sy)};
+ M().querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{const w=b.dataset.w;A.custom=A.custom.includes(w)?A.custom.filter(x=>x!==w):[...A.custom,w];redraw()});
+ const add=()=>{const v=$('cw').value.trim().replace(/\s+/g,' ');if(!v)return;if(!A.custom.includes(v)&&!NAMES.includes(v))A.custom.push(v);$('cw').value='';redraw()};
+ $('ad').onclick=add;$('cw').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();add()}};
+ bind('bk',back);
+ $('nx').onclick=()=>{A.order=null;A.dec=[];A.pairs=null;A.sel=null;go('cards')};
+};
+
+function makeOrder(){
+ const cu=A.custom||[], h=shuffle([...(A.hits||[]),...cu]), rest=shuffle(NAMES.filter(n=>!h.includes(n)));
+ return [...h,...rest];
+}
+R.cards=()=>{
+ if(!A.order)A.order=makeOrder();
+ const N=A.order.length, k=A.dec.length;
+ if(k>=N){
+  const yes=A.dec.filter(d=>d[1]).map(d=>d[0]);
+  if(yes.length>=MINSEL&&yes.length<=MAXSEL){A.sel=yes;A.viaTrim=false;return go('cmpintro')}
+  A.viaTrim=true;return go('trim');
+ }
+ const v=A.order[k],hit=(A.hits||[]).includes(v)||(A.custom||[]).includes(v),yc=A.dec.filter(d=>d[1]).length;
+ prog(24+k/N*14,'البطاقات',`اخترتِ حتى الآن: ${yc}`);
+ M().innerHTML=`<div class="card"><div class="cnt">بطاقة ${k+1} من ${N}</div>
+  <div class="vcard ${hit?'hit':''}" id="vc"><div class="vn">${v}</div>${hit?'<div class="vh">✦ ظهرت في كلماتك</div>':''}</div>
+  <div class="hint" style="text-align:center">هل تعني لك؟ اتبعي حدسك.</div></div>`;
+ F().innerHTML=`${backBtn}<div class="two"><button class="btn ghost" id="no">تخطي</button><button class="btn next" id="yes">تعني لي ✦</button></div>`;
+ const ans=y=>{A.dec.push([v,y]);save();render()};
+ $('yes').onclick=()=>ans(true);$('no').onclick=()=>ans(false);bind('bk',back);
+};
+
+R.trim=()=>{
+ const yes=A.dec.filter(d=>d[1]).map(d=>d[0]), skip=A.dec.filter(d=>!d[1]).map(d=>d[0]);
+ if(!A.sel||!A.selInit){A.sel=[...yes];A.selInit=true}
+ prog(40,'البطاقات');
+ const chips=(arr)=>arr.map(n=>`<button class="chip ${A.sel.includes(n)?'on':'off'}" data-n="${n}">${n}</button>`).join('');
+ const draw=()=>{
+  const sy=window.scrollY;
+  const c=A.sel.length,ok=c>=MINSEL&&c<=MAXSEL;
+  const msg=c>MAXSEL?`اخترتِ ${c}. نحتاج ${MAXSEL} فقط، أزيلي ${c-MAXSEL}.`:c<MINSEL?`اخترتِ ${c}. نحتاج ${MINSEL} على الأقل، أضيفي ${MINSEL-c} من التي تخطيتِها.`:`ممتاز: ${c} قيمة ✦`;
+  M().innerHTML=`<div class="card"><h2>نضبط اختيارك</h2><div class="hint" style="font-weight:700;color:${ok?'#2e9e5b':'var(--blue)'}">${msg}</div>
+   ${yes.length?`<div class="hint" style="margin-top:14px">التي اخترتِها (اضغطي لإزالة أو إعادة):</div><div class="chips">${chips(yes)}</div>`:''}
+   ${skip.length?`<div class="hint" style="margin-top:14px">التي تخطيتِها (اضغطي لإضافة):</div><div class="chips">${chips(skip)}</div>`:''}</div>`;
+  F().innerHTML=`${backBtn}<button class="btn next" id="nx" ${ok?'':'disabled'}>التالي</button>`;
+  M().querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const n=b.dataset.n;A.sel=A.sel.includes(n)?A.sel.filter(x=>x!==n):[...A.sel,n];save();draw()});
+  window.scrollTo(0,sy);
+  bind('bk',()=>{A.selInit=false;back()});$('nx').onclick=()=>{A.selInit=false;go('cmpintro')};
+ };
+ draw();
+};
+
+/* ---------- المقارنة المتطرفة: أسئلة ذكية ---------- */
+function buildPairs(vals){
+ const n=vals.length;let best=null,bestScore=1e9;
+ for(let t=0;t<400&&bestScore>0;t++){
+  const seen=new Set(),list=[];let score=0;
+  for(let c=0;c<2;c++){
+   const p=shuffle(vals);
+   for(let k=0;k<n;k++){
+    const a=p[k],b=p[(k+1)%n],key=[a,b].sort().join('|');
+    if(seen.has(key)){score+=100;continue}
+    seen.add(key);list.push([a,b]);if(FAM(a)===FAM(b))score+=1;
+   }
+  }
+  if(score<bestScore){bestScore=score;best=list}
+ }
+ /* ترتيب بحيث لا تتكرر نفس القيمة في سؤالين متتاليين قدر الإمكان */
+ let bestOrd=best,bo=1e9;
+ for(let t=0;t<200&&bo>0;t++){
+  const o=shuffle(best);let s=0;
+  for(let i=1;i<o.length;i++)if(o[i].some(x=>o[i-1].includes(x)))s++;
+  if(s<bo){bo=s;bestOrd=o}
+ }
+ return bestOrd.map(([a,b])=>Math.random()<.5?[a,b]:[b,a]);
+}
+const wins=()=>{const w={};A.sel.forEach(v=>w[v]=0);A.ans.forEach(x=>{if(w[x.w]!=null)w[x.w]++});return w};
+/* أسئلة حسم: حتى ٤ أسئلة إضافية بين القيم القريبة من الحد الفاصل (الخامسة/السادسة) */
+function nextTie(){
+ if(A.ans.length-A.pairs.length>=4)return null;
+ const w=wins(),K=Math.min(TOP,A.sel.length-1),ord=[...A.sel].sort((x,y)=>w[y]-w[x]);
+ const edge=(w[ord[K-1]]+w[ord[K]])/2;
+ const done=new Set(A.ans.map(x=>[x.a,x.b].sort().join('|'))),c=[];
+ for(let i=0;i<A.sel.length;i++)for(let j=i+1;j<A.sel.length;j++){
+  const a=A.sel[i],b=A.sel[j];
+  if(done.has([a,b].sort().join('|')))continue;
+  const da=Math.abs(w[a]-edge),db=Math.abs(w[b]-edge);
+  if(da<=1&&db<=1)c.push([a,b,da+db+Math.random()*.01]);
+ }
+ if(!c.length)return null;
+ c.sort((x,y)=>x[2]-y[2]);
+ const p=c[0];return Math.random()<.5?[p[0],p[1]]:[p[1],p[0]];
+}
+function finalRank(){
+ const w=wins(),r={};A.sel.forEach(v=>r[v]=Math.random());
+ const h2h=(x,y)=>{const a=A.ans.find(q=>(q.a===x&&q.b===y)||(q.a===y&&q.b===x));return a?(a.w===x?-1:1):0};
+ A.rank=[...A.sel].sort((x,y)=>(w[y]-w[x])||h2h(x,y)||(r[x]-r[y]));
+ A.finals=A.rank.slice(0,TOP);A.pool=A.rank.slice(TOP);A.verd={};A.wins=w;
+}
+R.cmpintro=()=>{
+ prog(41,'المقارنة');
+ const n=A.sel.length*2;
+ M().innerHTML=`<div class="card"><h2>المقارنة المتطرفة ✦</h2>
+  <p class="pre" style="margin-top:10px">في كل سؤال تظهر لك قيمتان، وتختارين الحياة التي تفضلين أن تعيشيها <b>بقيمة وبدون الأخرى</b>.<br>مثلًا: «أعيش الحرية من غير الحب»، أو «أعيش الحب من غير الحرية».</p>
+  <div class="quote" style="text-align:right">لا يوجد جواب صحيح. اختاري بسرعة ولا تفكري طويلًا.<br>القيم التي تتكرر في اختياراتك هي الأقرب لك.<br>نحو ${n} سؤالًا سريعًا، تأخذ دقيقتين أو ثلاثًا.</div>
+  <div class="cr">تعلّمتُ هذا التمرين من د. سمية الناصر عبر <a href="${VIDEO}" target="_blank" rel="noopener">يوتيوب</a></div></div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">نبدأ المقارنة ✦</button>`;
+ bind('bk',back);$('nx').onclick=()=>go('cmp');
+};
+R.cmp=()=>{
+ const key=A.sel.join('|');
+ if(!A.pairs||A.pk!==key){A.pk=key;A.pairs=buildPairs(A.sel);A.ans=[]}
+ const total=A.pairs.length,done=A.ans.length;let q,extra=false;
+ if(done<total)q=A.pairs[done];
+ else{q=nextTie();extra=true;if(!q){finalRank();return go('sum')}}
+ prog(42+Math.min(done,total)/total*30,'المقارنة',extra?'سؤال حسم أخير ✦':`سؤال ${done+1} من ${total}`);
+ const [a,b]=q;
+ M().innerHTML=`<div class="card"><h2>أي حياة تختارين؟</h2><div class="hint">لا يوجد جواب صحيح. اختاري بسرعة.</div><div>
+  <button class="cmp" id="oa">أعيش <b>${a}</b><br>من غير ${b}</button>
+  <div class="or">أو</div>
+  <button class="cmp" id="ob">أعيش <b>${b}</b><br>من غير ${a}</button>
+  </div></div>`;
+ F().innerHTML=`${backBtn}<div style="flex:1"></div>`;
+ let busy=false;
+ const pick=(w,id)=>{if(busy)return;busy=true;A.ans.push({a,b,w});save();render()};
+ $('oa').onclick=()=>pick(a,'oa');$('ob').onclick=()=>pick(b,'ob');bind('bk',back);
+};
+
+/* ---------- الخلاصة والتأكد ---------- */
+R.sum=()=>{
+ prog(76,'خلاصتك');
+ const opts=[['yes','تشبكت معي'],['maybe','مو متأكدة'],['no','ما تشبهني']];
+ M().innerHTML=`<div class="card"><h2>هذه قيمك الأعلى ✦</h2>
+  <div class="hint">هل شعرتِ أنها تشبّكت معك؟ لاحظي جسمك: هل يتفاعل معها؟<br>تفاعل الجسد معلومة مفيدة، وليس حكمًا نهائيًا.</div>
+  ${A.finals.map((v,i)=>`<div class="sc ${A.verd[v]||''}"><div class="sn"><span>${i+1}</span>${v}</div><div class="so">${opts.map(([k,l])=>`<button class="${A.verd[v]===k?'on':''}" data-v="${v}" data-k="${k}">${l}</button>`).join('')}</div></div>`).join('')}</div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">التالي</button>`;
+ const upd=()=>{$('nx').disabled=!A.finals.every(v=>A.verd[v])};
+ M().querySelectorAll('.so button').forEach(b=>b.onclick=()=>{A.verd[b.dataset.v]=b.dataset.k;save();const sy=window.scrollY;R.sum();window.scrollTo(0,sy)});
+ upd();bind('bk',back);
+ $('nx').onclick=()=>{
+  const bad=A.finals.filter(v=>A.verd[v]==='no');
+  if(bad.length){
+   const keep=A.finals.filter(v=>A.verd[v]!=='no');
+   const add=A.pool.slice(0,bad.length);A.pool=A.pool.slice(bad.length);
+   const fin=[];A.finals.forEach(v=>{if(A.verd[v]!=='no')fin.push(v);else if(add.length)fin.push(add.shift())});
+   A.finals=fin;bad.forEach(v=>delete A.verd[v]);save();
+   if(A.finals.some(v=>!A.verd[v]))return R.sum();
+  }
+  if(!A.finals.length)return R.sum();
+  go('val',0);
+ };
+};
+
+/* ---------- المعنى والمثال لكل قيمة ---------- */
+R.val=()=>{
+ const i=sub,v=A.finals[i],req=i<3;
+ prog(80+i/A.finals.length*12,'المعنى');
+ M().innerHTML=`<div class="card"><div class="vt">${v}</div><div class="reqt">قيمة ${i+1} من ${A.finals.length}</div>
+  <label class="l">معنى ${v} عندي… ${req?'':'<span style="font-weight:400;color:var(--soft)">(اختياري)</span>'}</label>
+  <textarea id="mn" placeholder="اكتبي بكلماتك…">${esc(A.mean[v])}</textarea>
+  <div class="hint" style="margin-top:12px;font-size:13.5px;line-height:1.8">تقدرين تبدئين بإحدى هذه الجمل وتكملين الفراغ بكلماتك. اضغطي عليها لتُضاف في الخانة، أو اكتبي بحرية:</div>
+  <div class="chips">${STARTERS.map(s=>`<button class="chip add" data-s="${s}">${s} ____</button>`).join('')}</div></div>`;
+ const last=i===A.finals.length-1;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">${last?'التالي':'القيمة التالية'}</button>`;
+ const upd=()=>{$('nx').disabled=req&&$('mn').value.trim().length<3};
+ $('mn').oninput=()=>{A.mean[v]=$('mn').value;save();upd()};
+ M().querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const t=$('mn');t.value=(t.value.trim()?t.value.trim()+' ':'')+b.dataset.s.replace('…','')+' ';A.mean[v]=t.value;save();upd();t.focus()});
+ upd();bind('bk',back);
+ $('nx').onclick=()=>last?go('ex'):go('val',i+1);
+};
+
+/* ---------- صفحة أمثلة ---------- */
+R.ex=()=>{
+ prog(92,'أمثلة');
+ const keys=Object.keys(EXAMPLES);
+ M().innerHTML=`<div class="card"><h2>كيف تظهر القيمة في يومك؟</h2>
+  <div class="hint" style="font-size:14px">أمثلة فقط لتوضيح الفكرة. لاحظي هل حصل معك شيء مشابه:</div>
+  ${keys.map(k=>`<div class="exh">${k}</div>
+   ${EXAMPLES[k].map((t,x)=>`<div class="exb"><p>${t}</p><div class="exchips">${EXOPT.map((o,y)=>`<button class="chip ${(A.exc[k]||{})[x]===y?'on':''}" data-k="${k}" data-x="${x}" data-y="${y}">${o}</button>`).join('')}</div></div>`).join('')}`).join('')}</div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx">التالي</button>`;
+ M().querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;A.exc[k]=A.exc[k]||{};A.exc[k][b.dataset.x]=+b.dataset.y;save();const sy=window.scrollY;R.ex();window.scrollTo(0,sy)});
+ bind('bk',back);$('nx').onclick=()=>go('step');
+};
+
+/* ---------- أصغر خطوة ---------- */
+R.step=()=>{
+ prog(96,'الختام');
+ M().innerHTML=`<div class="card"><h2>ما أصغر خطوة تقومين بها الآن، في يومك هذا، تجسّدين فيها قيمة من قيمك العليا؟</h2>
+  <textarea id="tx" placeholder="اكتبي خطوتك…" style="min-height:120px">${esc(A.step)}</textarea></div>`;
+ F().innerHTML=`${backBtn}<button class="btn next" id="nx" disabled>اعرضي بطاقتي ✦</button>`;
+ const upd=()=>{$('nx').disabled=!$('tx').value.trim()};
+ $('tx').oninput=()=>{A.step=$('tx').value;save();upd()};upd();
+ bind('bk',back);$('nx').onclick=()=>go('card');
+};
+
+/* ---------- البطاقة ---------- */
+function wrap(ctx,text,maxW,maxLines){
+ const words=String(text).replace(/\s+/g,' ').trim().split(' '),lines=[];let cur='';
+ for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t}
+ if(cur)lines.push(cur);
+ if(lines.length>maxLines){const l=lines.slice(0,maxLines);let s=l[maxLines-1];while(ctx.measureText(s+'…').width>maxW&&s.length>1)s=s.slice(0,-1);l[maxLines-1]=s+'…';return l}
+ return lines;
+}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+async function makeCard(){
+ try{await document.fonts.load('800 40px Tajawal');await document.fonts.load('500 30px Tajawal')}catch(e){}
+ const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.direction='rtl';
+ x.fillStyle='#3D6E9A';x.fillRect(0,0,W,H);
+ x.globalAlpha=.1;x.fillStyle='#FFEBB1';x.beginPath();x.arc(60,60,300,0,7);x.fill();x.beginPath();x.arc(1040,1300,260,0,7);x.fill();x.globalAlpha=1;
+ x.textAlign='center';x.fillStyle='#FFEBB1';x.font='800 96px Tajawal, sans-serif';x.fillText('قيمي ✦',W/2,150);
+
+ x.fillStyle='#fff';x.font='500 38px Tajawal, sans-serif';x.fillText(A.name+'  ·  في هذه المرحلة',W/2,215);
+ const px=60,pw=W-120,py=245;
+ let y=py+20;const rows=[];
+ A.finals.forEach(v=>{
+  x.font='500 29px Tajawal, sans-serif';
+  const m=(A.mean[v]||'').trim(),ls=m?wrap(x,m,pw-100,2):[];
+  rows.push({v,ls});
+ });
+ const rowH=r=>r.ls.length?86+(r.ls.length-1)*36+34:40+36;
+ const ph=20+rows.reduce((s,r)=>s+rowH(r),0)+10;
+ x.fillStyle='#fff';rr(x,px,py,pw,ph,36);x.fill();
+ x.textAlign='right';
+ rows.forEach((r,i)=>{
+  x.fillStyle='#e6b93c';x.font='800 32px Tajawal, sans-serif';x.fillText('✦',W-px-40,y+40);
+  x.fillStyle='#3D6E9A';x.font='800 46px Tajawal, sans-serif';x.fillText(r.v,W-px-90,y+42);
+  x.fillStyle='#53697c';x.font='500 29px Tajawal, sans-serif';
+  r.ls.forEach((l,j)=>x.fillText(l,W-px-50,y+88+j*36));
+  y+=rowH(r);
+  if(i<rows.length-1){x.fillStyle='#e3ebf3';x.fillRect(px+50,y-14,pw-100,2)}
+ });
+ const by=py+ph+26;
+ x.font='500 31px Tajawal, sans-serif';
+ const sl=wrap(x,A.step,pw-72,Math.max(1,Math.floor((H-by-100-80)/42))),bh=Math.min(H-by-100,100+sl.length*42);
+ x.fillStyle='#FFEBB1';rr(x,px,by,pw,bh,30);x.fill();
+ x.fillStyle='#2c5578';x.font='800 28px Tajawal, sans-serif';x.fillText('أصغر خطوة أقوم بها اليوم',W-px-36,by+48);
+ x.fillStyle='#1f4467';x.font='500 31px Tajawal, sans-serif';
+ sl.forEach((l,j)=>x.fillText(l,W-px-36,by+96+j*42));
+ x.textAlign='center';x.fillStyle='#dbe8f3';x.font='500 28px Tajawal, sans-serif';
+ x.fillText('هذه قيمي في هذه المرحلة، وتتغير مع نموي',W/2,H-98);
+ x.fillStyle='#FFEBB1';x.font='700 26px Tajawal, sans-serif';x.fillText('عائشة الزبيدي | تحديات عَين',W/2,H-52);
+ x.fillStyle='#dbe8f3';x.font='500 23px Tajawal, sans-serif';x.fillText('t.me/ui829   ·   instagram.com/ui829',W/2,H-18);
+ return c.toDataURL('image/jpeg',.92);
+}
+function msg(){
+ let t=`✦ قيمي في هذه المرحلة — ${A.name}\n`;
+ A.finals.forEach((v,i)=>{
+  t+=`\n${i+1}. ${v}`;
+  if((A.mean[v]||'').trim())t+=`\nمعناها عندي: ${A.mean[v].trim()}`;
+ });
+ t+=`\n\nأصغر خطوة أقوم بها اليوم: ${A.step.trim()}`;
+ return t;
+}
+R.card=async()=>{
+ prog(100,'');
+ M().innerHTML=`<div class="card"><h1 style="font-size:28px">بطاقة قيمك ✦</h1><div class="hint" style="text-align:center">جاري تجهيزها…</div></div>`;
+ F().innerHTML=`${backBtn}`;bind('bk',back);
+ const img=await makeCard();const txt=msg(),enc=encodeURIComponent(txt);
+ const toFile=()=>{const bin=atob(img.split(',')[1]),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new File([u],'قيمي.jpg',{type:'image/jpeg'})};
+ M().innerHTML=`<div class="card"><h1 style="font-size:26px">بطاقة قيمك ✦</h1>
+  <img class="cardimg" src="${img}" alt="بطاقة قيمي">
+  <div class="qt"><b>قيمك لا تتجسد على الورقة</b><b>بل في يومك وروتينك وعملك وعلاقاتك</b>هذه قيمك في هذه المرحلة، وقد تتغير مع نموك</div>
+  <div class="act">
+   <a class="full gr" id="shr" href="https://t.me/share/url?url=${encodeURIComponent('✦')}&text=${enc}" target="_blank" rel="noopener">إرسال لعائشة | تحديات عَين</a>
+   <button class="yl" id="sv">حفظ الصورة</button>
+   <button id="cp">نسخ الرسالة</button>
+   <button class="full lt" id="clr">مسح إجاباتي من هذا الجهاز</button>
+  </div>
+  <div class="acc">تابعي حساب تحديات عَين:<div class="row"><a href="https://t.me/ui829" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21.9 4.3 18.6 19.6c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.4 13 1.7 11.5c-1-.3-1-1 .2-1.5L20.4 2.9c.9-.3 1.6.2 1.5 1.4z"/></svg></span>t.me/ui829</a><a href="https://instagram.com/ui829" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.3-3.3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg></span>instagram.com/ui829</a></div></div></div>`;
+ const saveImg=()=>{try{const f=toFile(),u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download='قيمي.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);$('sv').textContent='إن لم تظهر في الصور: اضغطي مطولًا على البطاقة أعلاه ثم «حفظ»'}catch(e){$('sv').textContent='اضغطي مطولًا على الصورة ثم حفظ'}};
+ $('sv').onclick=saveImg;
+ $('cp').onclick=()=>{const b=$('cp'),done=()=>{b.textContent='تم النسخ ✦';b.classList.add('ok');setTimeout(()=>{b.textContent='نسخ الرسالة';b.classList.remove('ok')},2200)};
+  const fb=()=>{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(e){b.textContent='انسخي من الصورة'}t.remove()};
+  try{navigator.clipboard.writeText(txt).then(done,fb)}catch(e){fb()}};
+ $('clr').onclick=()=>{clearSaved();A=fresh();go('welcome')};
+ burst();
+};
+
+function burst(){
+ for(let n=0;n<26;n++){const e=document.createElement('div');e.className='fl';e.textContent='✦';
+  e.style.left=Math.random()*100+'vw';e.style.bottom='-30px';e.style.fontSize=(14+Math.random()*26)+'px';e.style.animationDelay=(Math.random()*1.2)+'s';
+  document.body.appendChild(e);setTimeout(()=>e.remove(),4500);}
+}
+
+function render(){R[scr]();document.querySelectorAll('.ring').forEach(r=>r.onclick=()=>{r.classList.add('re');void r.offsetWidth;r.classList.remove('re');const p=r.querySelector('path');p.style.animation='none';void p.getBoundingClientRect();p.style.animation='rdraw 1.1s ease-out forwards'})}
+const sv0=loadSaved();
+render();
+window.__t={A:()=>A,wordsFrom,R,go,hitsFor,buildPairs,NAMES,wins};
+</script>
+</body>
+</html>
