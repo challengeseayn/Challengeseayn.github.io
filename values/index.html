@@ -135,7 +135,7 @@ footer{position:relative;z-index:1;padding:10px 20px 26px;display:flex;gap:10px;
 const EMAIL = "challenges.829@gmail.com";
 const VIDEO = "https://youtu.be/4Zh6PGOimEU";
 const KEY = "values_tool_v1";
-const MAXSEL = 12, MINSEL = 8, TOP = 5;
+const MAXSEL = 25, MINSEL = 6, TOP = 5, CAND = 12;
 
 /* القيم: العائلة | الاسم | كلمات تدل عليها (لاقتراح القيم من كلماتها) */
 const RAW = `
@@ -209,7 +209,7 @@ const esc = s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;
 const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ---------- تطبيع النص العربي واقتراح القيم من الكلمات ---------- */
-const norm = s=>String(s||'').replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ئ/g,'ي').replace(/ؤ/g,'و');
+const norm = s=>String(s||'').replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ئ/g,'ي').replace(/ؤ/g,'و');
 function hitsFor(text){
  const t=norm(text);
  const toks=t.split(/[^ء-ي]+/).filter(Boolean);
@@ -245,7 +245,7 @@ function back(){
  if(scr==='cards'){ if(A.dec.length){A.dec.pop();return go('cards')} return go('ext') }
  if(scr==='trim'){ A.dec.pop(); return go('cards') }
  if(scr==='cmp'){
-  if(A.ans.length){A.ans.pop();return go('cmp')}
+  if(A.ans.length){A.ans.pop();if(A.cand&&A.ans.length<A.p1len){A.cand=null;A.pairs=A.pairs.slice(0,A.p1len)}return go('cmp')}
   return go('cmpintro');
  }
  if(scr==='cmpintro'){ if(A.viaTrim)return go('trim'); A.dec.pop();return go('cards') }
@@ -387,9 +387,9 @@ R.trim=()=>{
  const draw=()=>{
   const sy=window.scrollY;
   const c=A.sel.length,ok=c>=MINSEL&&c<=MAXSEL;
-  const msg=c>MAXSEL?`اخترتِ ${c}. نحتاج ${MAXSEL} فقط، أزيلي ${c-MAXSEL}.`:c<MINSEL?`اخترتِ ${c}. نحتاج ${MINSEL} على الأقل، أضيفي ${MINSEL-c} من التي تخطيتِها.`:`ممتاز: ${c} قيمة ✦`;
+  const msg=c>MAXSEL?`اخترتِ ${c} قيمة، وهذا كثير على مقارنة مريحة. ركّزي على الأقرب لقلبك الآن، والباقي يبقى معك ولا يضيع (أبعدي ${c-MAXSEL}).`:c<MINSEL?`اخترتِ ${c}. نحتاج ${MINSEL} على الأقل، أضيفي ${MINSEL-c} من التي تخطيتِها.`:`ممتاز: ${c} قيمة ✦`;
   M().innerHTML=`<div class="card"><h2>نضبط اختيارك</h2><div class="hint" style="font-weight:700;color:${ok?'#2e9e5b':'var(--blue)'}">${msg}</div>
-   ${yes.length?`<div class="hint" style="margin-top:14px">التي اخترتِها (اضغطي لإزالة أو إعادة):</div><div class="chips">${chips(yes)}</div>`:''}
+   ${yes.length?`<div class="hint" style="margin-top:14px">التي اخترتِها (اضغطي لتأجيلها أو إعادتها):</div><div class="chips">${chips(yes)}</div>`:''}
    ${skip.length?`<div class="hint" style="margin-top:14px">التي تخطيتِها (اضغطي لإضافة):</div><div class="chips">${chips(skip)}</div>`:''}</div>`;
   F().innerHTML=`${backBtn}<button class="btn next" id="nx" ${ok?'':'disabled'}>التالي</button>`;
   M().querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const n=b.dataset.n;A.sel=A.sel.includes(n)?A.sel.filter(x=>x!==n):[...A.sel,n];save();draw()});
@@ -400,11 +400,11 @@ R.trim=()=>{
 };
 
 /* ---------- المقارنة المتطرفة: أسئلة ذكية ---------- */
-function buildPairs(vals){
+function buildPairs(vals,cycles=2,avoid=[]){
  const n=vals.length;let best=null,bestScore=1e9;
  for(let t=0;t<400&&bestScore>0;t++){
-  const seen=new Set(),list=[];let score=0;
-  for(let c=0;c<2;c++){
+  const seen=new Set(avoid),list=[];let score=0;
+  for(let c=0;c<cycles;c++){
    const p=shuffle(vals);
    for(let k=0;k<n;k++){
     const a=p[k],b=p[(k+1)%n],key=[a,b].sort().join('|');
@@ -423,15 +423,17 @@ function buildPairs(vals){
  }
  return bestOrd.map(([a,b])=>Math.random()<.5?[a,b]:[b,a]);
 }
-const wins=()=>{const w={};A.sel.forEach(v=>w[v]=0);A.ans.forEach(x=>{if(w[x.w]!=null)w[x.w]++});return w};
+const POOL=()=>A.cand||A.sel;
+const inPool=x=>POOL().includes(x.a)&&POOL().includes(x.b);
+const wins=()=>{const w={};POOL().forEach(v=>w[v]=0);A.ans.filter(inPool).forEach(x=>{if(w[x.w]!=null)w[x.w]++});return w};
 /* أسئلة حسم: حتى ٤ أسئلة إضافية بين القيم القريبة من الحد الفاصل (الخامسة/السادسة) */
 function nextTie(){
  if(A.ans.length-A.pairs.length>=4)return null;
- const w=wins(),K=Math.min(TOP,A.sel.length-1),ord=[...A.sel].sort((x,y)=>w[y]-w[x]);
+ const P=POOL(),w=wins(),K=Math.min(TOP,P.length-1),ord=[...P].sort((x,y)=>w[y]-w[x]);
  const edge=(w[ord[K-1]]+w[ord[K]])/2;
  const done=new Set(A.ans.map(x=>[x.a,x.b].sort().join('|'))),c=[];
- for(let i=0;i<A.sel.length;i++)for(let j=i+1;j<A.sel.length;j++){
-  const a=A.sel[i],b=A.sel[j];
+ for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){
+  const a=P[i],b=P[j];
   if(done.has([a,b].sort().join('|')))continue;
   const da=Math.abs(w[a]-edge),db=Math.abs(w[b]-edge);
   if(da<=1&&db<=1)c.push([a,b,da+db+Math.random()*.01]);
@@ -441,14 +443,18 @@ function nextTie(){
  const p=c[0];return Math.random()<.5?[p[0],p[1]]:[p[1],p[0]];
 }
 function finalRank(){
- const w=wins(),r={};A.sel.forEach(v=>r[v]=Math.random());
+ const P=POOL(),w=wins(),r={};P.forEach(v=>r[v]=Math.random());
  const h2h=(x,y)=>{const a=A.ans.find(q=>(q.a===x&&q.b===y)||(q.a===y&&q.b===x));return a?(a.w===x?-1:1):0};
- A.rank=[...A.sel].sort((x,y)=>(w[y]-w[x])||h2h(x,y)||(r[x]-r[y]));
+ const top=[...P].sort((x,y)=>(w[y]-w[x])||h2h(x,y)||(r[x]-r[y]));
+ /* القيم التي لم تتقدم للمرحلة الثانية تُرتَّب بعدها حسب فوزها في المرحلة الأولى */
+ const w1={};A.sel.forEach(v=>w1[v]=0);A.ans.forEach(x=>{if(w1[x.w]!=null)w1[x.w]++});
+ const rest=A.sel.filter(v=>!P.includes(v)).sort((x,y)=>(w1[y]-w1[x])||(Math.random()-.5));
+ A.rank=[...top,...rest];
  A.finals=A.rank.slice(0,TOP);A.pool=A.rank.slice(TOP);A.verd={};A.wins=w;
 }
 R.cmpintro=()=>{
  prog(41,'المقارنة');
- const n=A.sel.length*2;
+ const N=A.sel.length,n=N<=CAND?N*2:N+CAND+2;
  M().innerHTML=`<div class="card"><h2>المقارنة المتطرفة ✦</h2>
   <p class="pre" style="margin-top:10px">في كل سؤال تظهر لك قيمتان، وتختارين الحياة التي تفضلين أن تعيشيها <b>بقيمة وبدون الأخرى</b>.<br>مثلًا: «أعيش الحرية من غير الحب»، أو «أعيش الحب من غير الحرية».</p>
   <div class="quote" style="text-align:right">لا يوجد جواب صحيح. اختاري بسرعة ولا تفكري طويلًا.<br>القيم التي تتكرر في اختياراتك هي الأقرب لك.<br>نحو ${n} سؤالًا سريعًا، تأخذ دقيقتين أو ثلاثًا.</div>
@@ -457,12 +463,20 @@ R.cmpintro=()=>{
  bind('bk',back);$('nx').onclick=()=>go('cmp');
 };
 R.cmp=()=>{
- const key=A.sel.join('|');
- if(!A.pairs||A.pk!==key){A.pk=key;A.pairs=buildPairs(A.sel);A.ans=[]}
- const total=A.pairs.length,done=A.ans.length;let q,extra=false;
+ const key=A.sel.join('|'),N=A.sel.length;
+ if(!A.pairs||A.pk!==key){A.pk=key;A.cand=null;A.pairs=buildPairs(A.sel,N<=CAND?2:1);A.p1len=A.pairs.length;A.ans=[]}
+ /* انتهت المرحلة الأولى: تتقدم أعلى القيم فوزًا لمقارنة أدق، بدون أن تحذف العميلة شيئًا */
+ if(N>CAND&&!A.cand&&A.ans.length>=A.pairs.length){
+  const w={};A.sel.forEach(v=>w[v]=0);A.ans.forEach(x=>{if(w[x.w]!=null)w[x.w]++});
+  const r={};A.sel.forEach(v=>r[v]=Math.random());
+  A.cand=[...A.sel].sort((x,y)=>(w[y]-w[x])||(r[x]-r[y])).slice(0,CAND);
+  const asked=A.ans.map(x=>[x.a,x.b].sort().join('|'));
+  A.pairs=[...A.pairs,...buildPairs(A.cand,1,asked)];save();
+ }
+ const est=N<=CAND?A.pairs.length:N+CAND+2,total=A.pairs.length,done=A.ans.length;let q,extra=false;
  if(done<total)q=A.pairs[done];
  else{q=nextTie();extra=true;if(!q){finalRank();return go('sum')}}
- prog(42+Math.min(done,total)/total*30,'المقارنة',extra?'سؤال حسم أخير ✦':`سؤال ${done+1} من ${total}`);
+ prog(42+Math.min(done/est,1)*30,'المقارنة',extra?'سؤال حسم أخير ✦':`سؤال ${done+1} من نحو ${Math.max(est,done+1)}`);
  const [a,b]=q;
  M().innerHTML=`<div class="card"><h2>أي حياة تختارين؟</h2><div class="hint">لا يوجد جواب صحيح. اختاري بسرعة.</div><div>
   <button class="cmp" id="oa">أعيش <b>${a}</b><br>من غير ${b}</button>
@@ -598,6 +612,8 @@ function msg(){
   t+=`\n${i+1}. ${v}`;
   if((A.mean[v]||'').trim())t+=`\nمعناها عندي: ${A.mean[v].trim()}`;
  });
+ const near=(A.rank||[]).filter(v=>!A.finals.includes(v)).slice(0,8);
+ if(near.length)t+=`\n\nوتبقى قريبة مني أيضًا: ${near.join('، ')}`;
  t+=`\n\nأصغر خطوة أقوم بها اليوم: ${A.step.trim()}`;
  return t;
 }
@@ -609,6 +625,7 @@ R.card=async()=>{
  const toFile=()=>{const bin=atob(img.split(',')[1]),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new File([u],'قيمي.jpg',{type:'image/jpeg'})};
  M().innerHTML=`<div class="card"><h1 style="font-size:26px">بطاقة قيمك ✦</h1>
   <img class="cardimg" src="${img}" alt="بطاقة قيمي">
+  ${(A.rank||[]).filter(v=>!A.finals.includes(v)).slice(0,8).length?`<div class="hint" style="text-align:center;margin-top:8px">وتبقى قريبة منك أيضًا: ${(A.rank||[]).filter(v=>!A.finals.includes(v)).slice(0,8).join('، ')}</div>`:''}
   <div class="qt"><b>قيمك لا تتجسد على الورقة</b><b>بل في يومك وروتينك وعملك وعلاقاتك</b>هذه قيمك في هذه المرحلة، وقد تتغير مع نموك</div>
   <div class="act">
    <a class="full gr" id="shr" href="https://t.me/share/url?url=${encodeURIComponent('✦')}&text=${enc}" target="_blank" rel="noopener">إرسال لعائشة | تحديات عَين</a>
@@ -635,7 +652,7 @@ function burst(){
 function render(){R[scr]();document.querySelectorAll('.ring').forEach(r=>r.onclick=()=>{r.classList.add('re');void r.offsetWidth;r.classList.remove('re');const p=r.querySelector('path');p.style.animation='none';void p.getBoundingClientRect();p.style.animation='rdraw 1.1s ease-out forwards'})}
 const sv0=loadSaved();
 render();
-window.__t={A:()=>A,wordsFrom,R,go,hitsFor,buildPairs,NAMES,wins};
+window.__t={A:()=>A,CAND,wordsFrom,R,go,hitsFor,buildPairs,NAMES,wins};
 </script>
 </body>
 </html>
