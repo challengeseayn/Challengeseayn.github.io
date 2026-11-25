@@ -49,6 +49,24 @@ footer{position:relative;z-index:1;padding:10px 20px 26px;display:flex;gap:10px;
 .meta{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--soft)}
 .big-def{font-size:20px;line-height:2;text-align:center;color:var(--blue);font-weight:500;margin-top:10px}
 .quote{background:var(--yel);border-radius:18px;padding:14px 16px;margin-top:16px;line-height:1.9;font-size:16px;color:#2c5578;text-align:center}
+.tabs{display:flex;gap:6px;margin-top:14px}
+.tb{flex:1 1 auto;font-family:inherit;font-size:13.5px;font-weight:700;padding:10px 4px;white-space:nowrap;border-radius:20px;border:2px solid var(--line);background:#fff;color:var(--soft);cursor:pointer}
+.tb.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.tb.val{border-color:#e6b93c}
+.tb.val.on{background:var(--yel);color:#2c5578;border-color:var(--blue)}
+.dd{margin-top:14px;border-radius:18px;background:#f5f9fc;border:2px solid var(--line);padding:16px 16px 14px;min-height:172px}
+.dd.val{background:var(--yel);border-color:var(--blue)}
+.dd b{display:block;font-size:24px;color:var(--blue);font-weight:800}
+.dd span{display:block;font-size:17px;line-height:1.9;margin-top:6px;color:var(--ink)}
+.dd i{display:block;font-style:normal;font-size:14px;line-height:1.9;margin-top:10px;color:var(--soft)}
+.dl{margin-top:10px}
+.dr{padding:12px 4px;border-bottom:1.5px solid var(--line)}
+.dr b{display:block;color:var(--blue);font-size:17px;font-weight:800}
+.dr span{display:block;font-size:14.5px;line-height:1.8;color:var(--ink);margin-top:2px}
+.dr.me{background:var(--yel);border-bottom:none;border-radius:14px;padding:12px 14px;margin-top:8px}
+.dr em{font-style:normal;font-size:12px;font-weight:700;color:#2c5578;background:#fff;border-radius:10px;padding:2px 8px;margin-right:8px;vertical-align:middle}
+.calm{margin-top:18px;text-align:center;font-size:14px;line-height:2;color:var(--soft)}
+.calm b{color:var(--blue);font-weight:800}
 .diff{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:14px}
 .diff div{border:2px solid var(--line);border-radius:16px;padding:10px 12px;font-size:14px;line-height:1.7;color:var(--ink)}
 .diff b{display:block;color:var(--blue);font-size:16px}
@@ -284,15 +302,20 @@ R.intro=()=>{
   <div class="big-def">هو كل ما هو قيّم لديك،<br>وتتخذين من خلاله قراراتك، وسلوكياتك، وأهدافك، وعلاقاتك، وكل جوانب حياتك.</div>
   <div class="quote">القيم ليست ثابتة، تتغير مع نموك وتجارب حياتك.<br>لكن القيم العليا الأساسية تميل للثبات.</div></div>`;
  }else{
-  M().innerHTML=`<div class="card"><h2>قبل البداية ✦</h2>
-  <div class="quote" style="text-align:right">اتبعي حدسك، واعتبريها لعبة ممتعة.<br>وإن شعرتِ بارتباك أو صعوبة، خذي نفسًا وذكّري نفسك:<br><b>أنا هنا لأستمتع وأكتشف.</b></div>
-  <div class="hint" style="margin-top:16px;font-weight:700;color:var(--blue)">الفرق بين:</div>
-  <div class="diff">
-   <div><b>الاهتمامات</b>ما يجذب اهتمامك وفضولك</div>
-   <div><b>المهارات</b>قدراتك وما تجيدينه بشكل فطري أو دربتِ نفسك عليه</div>
-   <div><b>الشخصية</b>أسلوبك وطريقتك</div>
-   <div class="me"><b>القيم</b>ما هو أولويتك والمعنى الخاص بك</div>
-  </div></div>`;
+  const D=[['الاهتمامات','ما يجذب اهتمامك وفضولك.','مثال: أحب التصوير، وأقرأ كثيرًا عن النفس.'],
+   ['المهارات','قدراتك وما تجيدينه، فطريًا أو بالتدريب.','مثال: أجيد التنظيم وكتابة المحتوى.'],
+   ['الشخصية','أسلوبك وطريقتك.','مثال: هادئة، اجتماعية، تحب التفاصيل.'],
+   ['القيم','ما هو أولويتك، والمعنى الخاص بك.','مثال: الصدق، الحرية، العطاء… ما تعيشين به وتقررين من خلاله.']];
+  let tab=A.dtab==null?0:A.dtab;
+  const draw=()=>{
+   M().innerHTML=`<div class="card"><h2>قبل البداية ✦</h2>
+   <div class="hint" style="margin-top:6px">أربعة أشياء تتشابه في الذهن. اضغطي على كل واحدة لترين الفرق:</div>
+   <div class="tabs">${D.map((d,i)=>`<button class="tb ${i===3?'val':''} ${i===tab?'on':''}" data-i="${i}">${d[0]}</button>`).join('')}</div>
+   <div class="dd ${tab===3?'val':''}"><b>${D[tab][0]}</b><span>${D[tab][1]}</span><i>${D[tab][2]}</i></div>
+   <div class="calm">اتبعي حدسك، واعتبريها لعبة ممتعة.<br>وإن شعرتِ بارتباك أو صعوبة، خذي نفسًا وقولي لنفسك:<br><b>أنا هنا لأستمتع وأكتشف.</b></div></div>`;
+   M().querySelectorAll('.tb').forEach(b=>b.onclick=()=>{tab=+b.dataset.i;A.dtab=tab;draw()});
+  };
+  draw();
  }
  F().innerHTML=`${backBtn}<button class="btn next" id="nx">${sub===0?'التالي':'نبدأ ✦'}</button>`;
  bind('bk',back);
